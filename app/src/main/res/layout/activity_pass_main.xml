@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ulima.tesis.passwordgrafico.PassPoints.PassMain">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTam"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:paddingTop="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTam"
+        android:id="@+id/tvTamP"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:paddingTop="10dp"/>
+
+
+
+    <GridLayout
+        android:id="@+id/mygrid"
+        android:layout_width="390dp"
+        android:layout_height="320dp"
+        android:orientation="horizontal"
+        android:columnCount="25"
+        android:layout_centerInParent="true"
+        android:rowCount="20"
+        android:background="@drawable/callealfonso"
+        >
+    </GridLayout>
+
+    <Button
+        android:id="@+id/btnIng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:textColor="@color/Titulos2"
+        android:text="Registrar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/mygrid"
+        android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>

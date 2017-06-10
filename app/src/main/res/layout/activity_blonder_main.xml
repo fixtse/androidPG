@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ulima.tesis.passwordgrafico.Blonder.BlonderMain">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTam"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:paddingTop="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvTam"
+        android:id="@+id/tvTamP"
+        android:text="Prueba"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        android:paddingTop="10dp"/>
+
+
+
+    <RelativeLayout
+        android:id="@+id/mygrid"
+        android:layout_width="390dp"
+        android:layout_height="320dp"
+        android:orientation="horizontal"
+        android:background="@drawable/paisaje"
+        android:layout_centerInParent="true"
+        >
+
+
+        <ImageView
+            android:id="@+id/im2"
+            android:layout_width="60dp"
+            android:layout_height="120dp"
+            android:src="@drawable/boy"
+            android:layout_below="@+id/im1"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="39dp"
+            android:layout_marginTop="13dp" />
+
+        <ImageView
+            android:id="@+id/im1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/sol" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:id="@+id/im3"
+            android:src="@drawable/bike"
+            android:layout_marginEnd="28dp"
+            android:layout_above="@+id/im5"
+            android:layout_toStartOf="@+id/im7" />
+
+        <ImageView
+            android:layout_width="110dp"
+            android:layout_height="160dp"
+            android:id="@+id/im4"
+            android:src="@drawable/tree"
+            android:layout_above="@+id/im7"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="18dp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/clock9"
+            android:id="@+id/im5"
+            android:layout_marginBottom="13dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/im4"
+            android:layout_marginStart="14dp" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/im6"
+            android:src="@drawable/ant"
+            android:layout_alignTop="@+id/im2"
+            android:layout_alignStart="@+id/im7" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/im7"
+            android:src="@drawable/rocket"
+            android:layout_marginEnd="37dp"
+            android:layout_alignBottom="@+id/im5"
+            android:layout_alignEnd="@+id/im2" />
+
+
+
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnIng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:textColor="@color/Titulos2"
+        android:text="Registrar"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/mygrid"
+        android:layout_centerHorizontal="true" />
+
+
+
+</RelativeLayout>

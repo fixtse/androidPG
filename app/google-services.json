@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "540752632251",
+    "firebase_url": "https://passwordgrafico.firebaseio.com",
+    "project_id": "passwordgrafico",
+    "storage_bucket": "passwordgrafico.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:540752632251:android:ec264caa36120200",
+        "android_client_info": {
+          "package_name": "com.ulima.tesis.passwordgrafico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "540752632251-3073ksp1uu34hqhi6v0mntgrtf0kpc4m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALhZJuH3sKZsUTQ4KTRBMWk_keLM54ryA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
