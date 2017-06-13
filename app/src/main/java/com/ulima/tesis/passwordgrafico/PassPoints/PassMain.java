@@ -127,21 +127,22 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
 
         if (touchOn){
             if (listPuntos.size()<5){
-            PassWordP p = new PassWordP();
-            List<Integer> val = new ArrayList<>();
-            val.add(v.getIdX());
-            val.add(v.getIdY());
-            p.setPos(val);
-            List<Integer> val2 = new ArrayList<>();
-            val2.add(wp);
-            val2.add(hp);
-            p.setDensidad(val2);
-            List<Integer> val3 = new ArrayList<>();
-            val3.add((int)(v.getrX()+(v.getIdX()*wp)+1));
-            val3.add((int)(v.getrY()+(v.getIdY()*hp)+1));
-            p.setPreal(val3);
+                PassWordP p = new PassWordP();
+                List<Integer> val2 = new ArrayList<>();
+                val2.add(wp);
+                val2.add(hp);
+                p.setDensidad(val2);
+                List<Integer> val = new ArrayList<>();
+                val.add(v.getIdX()+1);
+                val.add(v.getIdY()+1);
+                p.setPos(val);
 
-            listPuntos.add(p);
+                List<Integer> val3 = new ArrayList<>();
+                val3.add((int)(v.getrX()+(v.getIdX()*wp)+1));
+                val3.add((int)(v.getrY()+(v.getIdY()*hp)+1));
+                p.setPreal(val3);
+
+                listPuntos.add(p);
 
             }else{
                 Toast.makeText(PassMain.this,"Solo se usaran los 5 primeros toques"
@@ -152,7 +153,7 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
             if (listPuntos.size() > 0){
                 List<PassWordP> list2 = new ArrayList<>();
                 for (PassWordP ps : listPuntos){
-                    if(ps.getPos().get(0) == v.getIdX() && ps.getPos().get(1) == v.getIdY()){
+                    if(ps.getPos().get(0) == (v.getIdX()+1) && ps.getPos().get(1) == (v.getIdY()+1)){
                         list2.add(ps);
                         Toast.makeText(PassMain.this,"Eliminado",Toast.LENGTH_SHORT).show();
                     }

@@ -1,5 +1,6 @@
 package com.ulima.tesis.passwordgrafico.PassPoints;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +17,17 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ulima.tesis.passwordgrafico.Beans.PassWordP;
+import com.ulima.tesis.passwordgrafico.Beans.Puntos;
 import com.ulima.tesis.passwordgrafico.MainActivity;
 import com.ulima.tesis.passwordgrafico.MyView;
 import com.ulima.tesis.passwordgrafico.R;
+import com.ulima.tesis.passwordgrafico.Stats;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -34,12 +40,15 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
     private TextView tvTam, tvTamP;
     private GridLayout myGridLayout;
     private int w,h,wp,hp;
+    private String key;
 
     private FirebaseDatabase database;
     private DatabaseReference passRef;
     private List<PassWordP> listPuntos = new ArrayList<>();
     private List<PassWordP> listPuntosPrev;
     private Intent prevIntent;
+    private List<Puntos> puntos ;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,8 +142,8 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
             if (listPuntos.size()<5){
                 PassWordP p = new PassWordP();
                 List<Integer> val = new ArrayList<>();
-                val.add(v.getIdX());
-                val.add(v.getIdY());
+                val.add(v.getIdX()+1);
+                val.add(v.getIdY()+1);
                 p.setPos(val);
                 List<Integer> val2 = new ArrayList<>();
                 val2.add(wp);
@@ -156,7 +165,7 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
             if (listPuntos.size() > 0){
                 List<PassWordP> list2 = new ArrayList<>();
                 for (PassWordP ps : listPuntos){
-                    if(ps.getPos().get(0) == v.getIdX() && ps.getPos().get(1) == v.getIdY()){
+                    if(ps.getPos().get(0) == (v.getIdX()+1) && ps.getPos().get(1) == (v.getIdY()+1)){
                         list2.add(ps);
                         Toast.makeText(PassVerif.this,"Eliminado",Toast.LENGTH_SHORT).show();
                     }
@@ -218,17 +227,67 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
                 }
             }
             if (cont==5){
-                passRef = database.getReference().child("passpoints");
-                String key = passRef.push().getKey();
+                passRef = database.getReference().child("Contraseñas-PassPoints");
+                key = passRef.push().getKey();
                 passRef.child(key).setValue(listPuntos);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-                Toast.makeText(PassVerif.this,"Contraseña registrada",Toast.LENGTH_SHORT).show();
+
+                estat();
+
             }else{
                 Toast.makeText(PassVerif.this,"Las contraseñas no coinciden, vuelva a intentar",Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
+    }
+
+    public void estat(){
+
+        dialog = new ProgressDialog(PassVerif.this);
+        //dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        dialog.setMessage("Obteniendo predicciones PassPoints");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+
+        DatabaseReference obtP = database.getReference().child("passP");
+        obtP.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                puntos = new ArrayList<>();
+
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    puntos.add(ds.getValue(Puntos.class));
+                }
+                mostrar();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void mostrar(){
+        //Toast.makeText(PassVerif.this,""+puntos.size(),Toast.LENGTH_SHORT).show();
+        dialog.dismiss();
+        Intent intent;
+        if (1==1){
+            intent = new Intent(getApplicationContext(),Stats.class);
+            intent.putExtra("puntos",(Serializable)puntos);
+            intent.putExtra("Pprev",(Serializable)listPuntos);
+            intent.putExtra("key",key);
+            startActivity(intent);
+
+        }else{
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            finish();
+            Toast.makeText(PassVerif.this,"Contraseña registrada",Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 }
