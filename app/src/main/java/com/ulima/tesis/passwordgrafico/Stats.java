@@ -8,11 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.opencsv.CSVWriter;
+//import com.opencsv.CSVWriter;
+import com.google.firebase.database.ValueEventListener;
 import com.ulima.tesis.passwordgrafico.Beans.PassWordP;
 import com.ulima.tesis.passwordgrafico.Beans.Puntos;
 import com.ulima.tesis.passwordgrafico.PassPoints.PassVerif;
@@ -33,6 +37,10 @@ public class Stats extends AppCompatActivity {
     private List<Puntos> puntos ;
     private Intent prevIntent;
     private ProgressDialog dialog;
+    private int num;
+    private String estat;
+    private int cont;
+    private int valores;
 
 
     @Override
@@ -46,6 +54,7 @@ public class Stats extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         prevIntent = getIntent();
+        num = prevIntent.getIntExtra("num",0);
         listPuntos = (List<PassWordP>) prevIntent.getSerializableExtra("Pprev");
         puntos = (List<Puntos>)prevIntent.getSerializableExtra("puntos");
         String keyP = prevIntent.getStringExtra("key");
@@ -59,8 +68,8 @@ public class Stats extends AppCompatActivity {
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        DatabaseReference Usuarioref = database.getReference().child("Resultados-PassP");
-        String key = Usuarioref.push().getKey();
+        DatabaseReference Usuarioref = database.getReference().child("Resultados-PassP").child(""+num);
+        String key = keyP; //Usuarioref.push().getKey();
 
         /*String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
         String fileName = key+".csv";
@@ -84,21 +93,31 @@ public class Stats extends AppCompatActivity {
         for (PassWordP ps : listPuntos) {
             double a=0;
             for (Puntos punto : puntos) {
-                float er= ((float)punto.getPx())/((float)ps.getDensidad().get(0));
-                int x = Math.round(er);
-                int y = Math.round(((float)punto.getPy())/((float)ps.getDensidad().get(1)));
+
+                int x = Math.round(((float)punto.getPx()));
+                int y = Math.round(((float)punto.getPy()));
                 //reporte.add(new String[] {punto.getPx()+"",ps.getDensidad().get(0)+"",""+x,""+ps.getPos().get(0),punto.getPy()+"",ps.getDensidad().get(1)+"",""+y,""+ps.getPos().get(1),""+punto.getPor()});
                 if ( ps.getPos().get(0).equals(x) && ps.getPos().get(1).equals(y) ){
-                    cont++;
-                    a = a +  Float.valueOf(punto.getPor());
+                    //cont++;
+                    //a = a +  Float.valueOf(punto.getPor());
+                    a = Float.valueOf(punto.getPor());
+                    break;
                 }
 
             }
             //reporte.add(new String[] {"------------"});
             //reporte.add(new String[] {""+a,""+cont});
-            double v = a/cont;
-            porc.add(v);
-            valpor += v;
+            /*double v;
+            if (cont ==0){
+               v = 0;
+            }else{
+               v  = a/cont;
+            }*/
+            porc.add(a);
+            valpor += a;
+            if (a > 0.d){
+                cont++;
+            }
 
         }
 
@@ -110,6 +129,7 @@ public class Stats extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
+        obtenerCont();
 
 
 
@@ -130,12 +150,26 @@ public class Stats extends AppCompatActivity {
 
         dialog.dismiss();
 
-        val1.setText("Total: "+String.format("%.2f", (valpor/5)));
-        val2.setText("Punto 1: "+String.format("%.2f", porc.get(0)));
-        val3.setText("Punto 2: "+String.format("%.2f", porc.get(1)));
-        val4.setText("Punto 3: "+String.format("%.2f", porc.get(2)));
-        val5.setText("Punto 4: "+String.format("%.2f", porc.get(3)));
-        val6.setText("Punto 5: "+String.format("%.2f", porc.get(4)));
+        /*val1.setText("Total: "+String.format("%.2f", (valpor/5))+" %");
+        val2.setText("Punto 1: "+String.format("%.2f", porc.get(0))+" %");
+        val3.setText("Punto 2: "+String.format("%.2f", porc.get(1))+" %");
+        val4.setText("Punto 3: "+String.format("%.2f", porc.get(2))+" %");
+        val5.setText("Punto 4: "+String.format("%.2f", porc.get(3))+" %");
+        val6.setText("Punto 5: "+String.format("%.2f", porc.get(4))+" %");*/
+
+        val2.setText("El modelo predijo:");
+        val3.setText(cont+ " de 5 puntos seleccionados");
+        val4.setText("Un "+(cont*100)/5+" %");
+        val5.setVisibility(View.GONE);
+        val6.setVisibility(View.GONE);
+        //val6.setVisibility(View.GONE);
+
+        Usuarioref = database.getReference().child("Acum").child(""+num);
+        //key = Usuarioref.push().getKey();
+        Usuarioref.child(keyP).setValue(cont);
+
+
+
 
 
         /*Uri u1 =   Uri.fromFile(f);
@@ -146,6 +180,34 @@ public class Stats extends AppCompatActivity {
         sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
         sendIntent.setType("text/richtext");
         startActivity(sendIntent);*/
+
+    }
+
+
+
+    public void obtenerCont(){
+
+
+        DatabaseReference Usuarioref = database.getReference().child("Acum").child(""+num);
+        Usuarioref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cont=0;
+                valores = 0;
+                for (DataSnapshot ds : dataSnapshot.getChildren()){
+                    cont++;
+                    valores = valores + ds.getValue(Integer.class);
+                }
+                float vel = ((float)valores)/((float)(cont*5));
+                estat = String.format("%.2f", (vel*100))+" %";
+                val1.setText("Predictibilidad Total de la imagen: "+estat);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 

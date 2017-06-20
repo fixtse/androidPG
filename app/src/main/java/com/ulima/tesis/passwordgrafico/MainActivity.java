@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Random randito = new Random();
+                /*Random randito = new Random();
                 int num = randito.nextInt(2) +1;
                 Intent intent;
 
@@ -32,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), BlonderMain.class);
                 }else{
                     intent = new Intent(getApplicationContext(), PassMain.class);
-                }
+                }*/
+                Intent intent;
+                intent = new Intent(getApplicationContext(), PassMain.class);
                 startActivity(intent);
             }
         });

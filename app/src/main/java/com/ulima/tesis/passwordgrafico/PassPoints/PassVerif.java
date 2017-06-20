@@ -49,6 +49,7 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
     private Intent prevIntent;
     private List<Puntos> puntos ;
     private ProgressDialog dialog;
+    private int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,15 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
                 ,Toast.LENGTH_SHORT).show();*/
 
         myGridLayout = (GridLayout)findViewById(R.id.mygrid);
+
+        num = prevIntent.getIntExtra("num",0);
+        if (num ==1){
+            myGridLayout.setBackgroundResource(R.drawable.callealfonso);
+        }else{
+            myGridLayout.setBackgroundResource(R.drawable.p3);
+        }
+
+
         tvTam = (TextView)findViewById(R.id.tvTam);
         tvTamP = (TextView)findViewById(R.id.tvTamP);
 
@@ -227,7 +237,7 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
                 }
             }
             if (cont==5){
-                passRef = database.getReference().child("Contraseñas-PassPoints");
+                passRef = database.getReference().child("Contraseñas-PassPoints").child(""+num);
                 key = passRef.push().getKey();
                 passRef.child(key).setValue(listPuntos);
 
@@ -249,7 +259,7 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
 
-        DatabaseReference obtP = database.getReference().child("passP");
+        DatabaseReference obtP = database.getReference().child("PSimp-PassP").child(""+num);
         obtP.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -279,6 +289,7 @@ public class PassVerif extends AppCompatActivity implements MyView.OnToggledList
             intent.putExtra("puntos",(Serializable)puntos);
             intent.putExtra("Pprev",(Serializable)listPuntos);
             intent.putExtra("key",key);
+            intent.putExtra("num",num);
             startActivity(intent);
 
         }else{

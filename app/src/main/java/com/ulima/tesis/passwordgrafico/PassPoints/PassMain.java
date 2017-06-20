@@ -23,6 +23,7 @@ import com.ulima.tesis.passwordgrafico.R;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PassMain extends AppCompatActivity implements MyView.OnToggledListener {
 
@@ -31,6 +32,7 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
     private GridLayout myGridLayout;
     private int w,h,wp,hp;
     private List<PassWordP> listPuntos = new ArrayList<>();
+    private int num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,17 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         myGridLayout = (GridLayout)findViewById(R.id.mygrid);
+
+        Random randito = new Random();
+        num = randito.nextInt(2) +1;
+        //Intent intent;
+        if (num == 1) {
+            myGridLayout.setBackgroundResource(R.drawable.callealfonso);
+        }else{
+            myGridLayout.setBackgroundResource(R.drawable.p3);
+        }
+
+
         tvTam = (TextView)findViewById(R.id.tvTam);
         tvTamP = (TextView)findViewById(R.id.tvTamP);
 
@@ -103,6 +116,7 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
                 }else{
                     Intent intent = new Intent(getApplicationContext(),PassVerif.class);
                     intent.putExtra("Pprev",(Serializable)listPuntos);
+                    intent.putExtra("num",num);
                     startActivity(intent);
                 }
             }
@@ -113,16 +127,7 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
     public void OnToggled(MyView v, boolean touchOn) {
 
         //get the id string
-        /*String idString = (v.getIdX()+1) + ":" + (v.getIdY()+1);
-        String pixel = ((v.getIdX()*wp)+1)+"x"+((v.getIdY()*hp)+1)+" ";
-        String real = (int)(v.getrX()+(v.getIdX()*wp)+1)+":"+(int)(v.getrY()+(v.getIdY()*hp)+1);
 
-        Toast.makeText(PassMain.this,
-                "Seleccionado:\n" +
-                        idString + "\n" +
-                        pixel+touchOn+"\n"+
-                        real,
-                Toast.LENGTH_SHORT).show();*/
 
 
         if (touchOn){
@@ -143,6 +148,17 @@ public class PassMain extends AppCompatActivity implements MyView.OnToggledListe
                 p.setPreal(val3);
 
                 listPuntos.add(p);
+
+                String idString = (v.getIdX()+1) + ":" + (v.getIdY()+1);
+                String pixel = ((v.getIdX()*wp)+1)+"x"+((v.getIdY()*hp)+1)+" ";
+                String real = (int)(v.getrX()+(v.getIdX()*wp)+1)+":"+(int)(v.getrY()+(v.getIdY()*hp)+1);
+
+                Toast.makeText(PassMain.this,
+                        "Seleccionado:\n" +
+                                idString + "\n" +
+                                //pixel+touchOn+"\n"+
+                                real,
+                        Toast.LENGTH_SHORT).show();
 
             }else{
                 Toast.makeText(PassMain.this,"Solo se usaran los 5 primeros toques"
